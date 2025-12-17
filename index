@@ -11,173 +11,206 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f3f4f6; }
         .gsi-blue { background-color: #1e3a8a; } /* Dark Blue */
-        .gsi-light { background-color: #eff6ff; }
-        .card { transition: transform 0.2s; }
-        .card:hover { transform: translateY(-2px); }
+        .gsi-text { color: #1e3a8a; }
+        /* Smooth transitions */
+        .fade-enter-active, .fade-leave-active { transition: opacity 0.3s ease; }
+        .fade-enter-from, .fade-leave-to { opacity: 0; }
     </style>
 </head>
-<body class="bg-gray-100 text-slate-800">
+<body class="text-slate-800">
 
     <div id="app" class="flex flex-col min-h-screen">
         
-        <header class="gsi-blue text-white p-4 shadow-lg">
+        <header class="gsi-blue text-white p-4 shadow-lg sticky top-0 z-50">
             <div class="container mx-auto flex items-center justify-between">
                 <div class="flex items-center space-x-4">
-                    <div class="bg-white p-1 rounded-full">
-                        <i class="fa-solid fa-earth-americas text-blue-800 text-3xl"></i>
+                    <div class="bg-white p-2 rounded-full shadow-inner">
+                        <i class="fa-solid fa-earth-americas text-blue-900 text-2xl"></i>
                     </div>
                     <div>
-                        <h1 class="text-2xl font-bold">GSI Vision 2047</h1>
-                        <p class="text-sm opacity-90">Geological Survey of India Strategic Roadmap</p>
+                        <h1 class="text-xl md:text-2xl font-bold tracking-wide">GSI Vision 2047</h1>
+                        <p class="text-xs md:text-sm opacity-90">Strategic Roadmap & Action Plan</p>
                     </div>
                 </div>
                 <div class="hidden md:block text-right text-xs opacity-75">
-                    <p>Generated from "Vision 2047 – Geological Survey of India (GSI).pdf"</p>
+                    <p>Source: Vision 2047 – Geological Survey of India (GSI).pdf</p>
                 </div>
             </div>
         </header>
 
-        <main class="container mx-auto flex-grow p-6 flex flex-col md:flex-row gap-6">
+        <main class="container mx-auto flex-grow p-4 md:p-6 flex flex-col lg:flex-row gap-6">
             
-            <aside class="w-full md:w-1/4 space-y-6">
-                <div class="bg-white p-5 rounded-lg shadow-md border-t-4 border-blue-800">
-                    <h2 class="text-lg font-bold mb-4 flex items-center">
-                        <i class="fa-solid fa-filter mr-2"></i> Filters
+            <aside class="w-full lg:w-1/4 space-y-6">
+                
+                <div class="bg-white p-5 rounded-xl shadow-md border-t-4 border-blue-800">
+                    <h2 class="text-lg font-bold mb-4 flex items-center text-gray-700">
+                        <i class="fa-solid fa-filter mr-2"></i> Interactive Filters
                     </h2>
                     
-                    <div class="mb-4">
-                        <label class="block text-sm font-semibold mb-2 text-gray-600">Timeline</label>
+                    <div class="mb-6">
+                        <label class="block text-xs font-bold uppercase text-gray-500 mb-2">Timeline Phase</label>
                         <div class="space-y-2">
-                            <label v-for="time in uniqueTimelines" :key="time" class="flex items-center space-x-2 cursor-pointer">
-                                <input type="checkbox" :value="time" v-model="selectedTimelines" class="form-checkbox text-blue-800 rounded">
-                                <span class="text-sm">{{ time }}</span>
+                            <label v-for="time in uniqueTimelines" :key="time" class="flex items-center space-x-3 cursor-pointer hover:bg-gray-50 p-1 rounded">
+                                <input type="checkbox" :value="time" v-model="selectedTimelines" class="w-4 h-4 text-blue-800 rounded focus:ring-blue-800">
+                                <span class="text-sm font-medium">{{ time }}</span>
                             </label>
                         </div>
                     </div>
 
-                    <hr class="border-gray-200 my-4">
+                    <hr class="border-gray-100 my-4">
 
                     <div>
-                        <label class="block text-sm font-semibold mb-2 text-gray-600">Strategic Pillars</label>
-                        <div class="space-y-2 max-h-64 overflow-y-auto">
-                            <label v-for="pillar in uniquePillars" :key="pillar" class="flex items-center space-x-2 cursor-pointer">
-                                <input type="checkbox" :value="pillar" v-model="selectedPillars" class="form-checkbox text-blue-800 rounded">
-                                <span class="text-xs">{{ pillar }}</span>
+                        <label class="block text-xs font-bold uppercase text-gray-500 mb-2">Strategic Pillars</label>
+                        <div class="space-y-1 max-h-64 overflow-y-auto pr-2 scrollbar-thin">
+                            <label v-for="pillar in uniquePillars" :key="pillar" class="flex items-center space-x-3 cursor-pointer hover:bg-gray-50 p-1 rounded">
+                                <input type="checkbox" :value="pillar" v-model="selectedPillars" class="w-4 h-4 text-blue-800 rounded focus:ring-blue-800">
+                                <span class="text-xs font-medium leading-tight">{{ pillar }}</span>
                             </label>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-blue-50 p-5 rounded-lg shadow-md border border-blue-100">
-                    <h3 class="font-bold text-blue-900 mb-2"><i class="fa-solid fa-eye mr-1"></i> Vision Statement</h3>
+                <div class="bg-gradient-to-br from-blue-50 to-white p-5 rounded-xl shadow-md border border-blue-100">
+                    <h3 class="font-bold text-blue-900 mb-2 flex items-center">
+                        <i class="fa-solid fa-eye mr-2"></i> Vision 2047
+                    </h3>
                     <p class="text-xs italic text-gray-700 leading-relaxed">
                         [cite_start]"To develop into a world-class, innovative, and agile multi-disciplinary geoscience institution that empowers India with foundational, objective, and actionable geological knowledge..." [cite: 42]
                     </p>
                 </div>
             </aside>
 
-            <section class="w-full md:w-3/4 space-y-6">
+            <section class="w-full lg:w-3/4 space-y-6">
                 
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div class="bg-white p-4 rounded-lg shadow card border-l-4 border-indigo-500">
-                        <p class="text-xs text-gray-500 uppercase font-bold">Total Goals</p>
+                    <div class="bg-white p-4 rounded-xl shadow-sm border-l-4 border-indigo-500 hover:shadow-md transition">
+                        <p class="text-xs text-gray-500 uppercase font-bold">Total Actions</p>
                         <p class="text-2xl font-bold text-indigo-700">{{ filteredData.length }}</p>
                     </div>
-                    <div class="bg-white p-4 rounded-lg shadow card border-l-4 border-emerald-500">
-                        <p class="text-xs text-gray-500 uppercase font-bold">Critical Mineral</p>
+                    <div class="bg-white p-4 rounded-xl shadow-sm border-l-4 border-emerald-500 hover:shadow-md transition">
+                        <p class="text-xs text-gray-500 uppercase font-bold">Economic Geology</p>
                         <p class="text-2xl font-bold text-emerald-700">{{ mineralGoalsCount }}</p>
                     </div>
-                    <div class="bg-white p-4 rounded-lg shadow card border-l-4 border-amber-500">
-                        <p class="text-xs text-gray-500 uppercase font-bold">Tech & AI</p>
+                    <div class="bg-white p-4 rounded-xl shadow-sm border-l-4 border-amber-500 hover:shadow-md transition">
+                        <p class="text-xs text-gray-500 uppercase font-bold">Tech Initiatives</p>
                         <p class="text-2xl font-bold text-amber-700">{{ techGoalsCount }}</p>
                     </div>
-                    <div class="bg-white p-4 rounded-lg shadow card border-l-4 border-rose-500">
+                    <div class="bg-white p-4 rounded-xl shadow-sm border-l-4 border-rose-500 hover:shadow-md transition">
                         <p class="text-xs text-gray-500 uppercase font-bold">2047 Targets</p>
                         <p class="text-2xl font-bold text-rose-700">{{ vision2047Count }}</p>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-lg shadow-md min-h-[500px]">
-                    <div class="flex border-b border-gray-200">
-                        <button @click="activeTab = 'visualizer'" :class="{'border-b-2 border-blue-800 text-blue-800 font-bold': activeTab === 'visualizer'}" class="px-6 py-3 text-sm focus:outline-none hover:bg-gray-50 transition">
-                            <i class="fa-solid fa-chart-pie mr-2"></i> Visualizer
+                <div class="bg-white rounded-xl shadow-md overflow-hidden min-h-[600px]">
+                    <div class="flex border-b border-gray-200 bg-gray-50 overflow-x-auto">
+                        <button @click="activeTab = 'visualizer'" 
+                            :class="{'border-b-4 border-blue-800 text-blue-900 bg-white': activeTab === 'visualizer', 'text-gray-500 hover:bg-gray-100': activeTab !== 'visualizer'}" 
+                            class="px-6 py-4 text-sm font-bold focus:outline-none transition-colors whitespace-nowrap">
+                            <i class="fa-solid fa-chart-pie mr-2"></i> Roadmap Visualizer
                         </button>
-                        <button @click="activeTab = 'table'" :class="{'border-b-2 border-blue-800 text-blue-800 font-bold': activeTab === 'table'}" class="px-6 py-3 text-sm focus:outline-none hover:bg-gray-50 transition">
-                            <i class="fa-solid fa-table mr-2"></i> Data Table
+                        <button @click="activeTab = 'table'" 
+                            :class="{'border-b-4 border-blue-800 text-blue-900 bg-white': activeTab === 'table', 'text-gray-500 hover:bg-gray-100': activeTab !== 'table'}" 
+                            class="px-6 py-4 text-sm font-bold focus:outline-none transition-colors whitespace-nowrap">
+                            <i class="fa-solid fa-table mr-2"></i> Action Plan Table
                         </button>
-                        <button @click="activeTab = 'minerals'" :class="{'border-b-2 border-blue-800 text-blue-800 font-bold': activeTab === 'minerals'}" class="px-6 py-3 text-sm focus:outline-none hover:bg-gray-50 transition">
-                            <i class="fa-solid fa-gem mr-2"></i> Deep Dive: Minerals
+                        <button @click="activeTab = 'minerals'" 
+                            :class="{'border-b-4 border-blue-800 text-blue-900 bg-white': activeTab === 'minerals', 'text-gray-500 hover:bg-gray-100': activeTab !== 'minerals'}" 
+                            class="px-6 py-4 text-sm font-bold focus:outline-none transition-colors whitespace-nowrap">
+                            <i class="fa-solid fa-gem mr-2"></i> Deep Dive: Critical Minerals
                         </button>
                     </div>
 
                     <div class="p-6">
                         
-                        <div v-show="activeTab === 'visualizer'">
-                            <div class="mb-6">
-                                <h3 class="font-bold text-gray-700 mb-2">Roadmap Timeline</h3>
-                                <div id="scatterPlot" class="w-full h-96"></div>
+                        <div v-show="activeTab === 'visualizer'" class="animate-fade">
+                            <div class="mb-8">
+                                <h3 class="font-bold text-gray-700 mb-2">Target Timeline Distribution</h3>
+                                <div id="scatterPlot" class="w-full h-80 bg-gray-50 rounded-lg"></div>
                             </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 <div>
-                                    <h3 class="font-bold text-gray-700 mb-2">Focus Areas Distribution</h3>
+                                    <h3 class="font-bold text-gray-700 mb-2">Strategic Focus Areas</h3>
                                     <div id="pieChart" class="w-full h-64"></div>
                                 </div>
-                                <div class="bg-gray-50 p-4 rounded text-sm">
-                                    <h4 class="font-bold mb-2">Key Insights from PDF:</h4>
-                                    <ul class="list-disc pl-5 space-y-2 text-gray-700">
-                                        [cite_start]<li><strong>Short Term (0-5 Yrs):</strong> Heavy focus on establishing new tech infrastructure (DPIIC, GPU facility) and mapping (NGPM)[cite: 121, 130].</li>
-                                        [cite_start]<li><strong>Medium Term (0-10 Yrs):</strong> Transition to predictive mapping and expanding landslide forecasting[cite: 124, 138].</li>
-                                        [cite_start]<li><strong>Long Term (2047):</strong> Achieving the "3D/4D Map of India" and full robotics integration[cite: 124, 130].</li>
+                                <div class="bg-blue-50 p-5 rounded-lg border border-blue-100">
+                                    <h4 class="font-bold text-blue-900 mb-3"><i class="fa-solid fa-lightbulb mr-2"></i>Key Insights</h4>
+                                    <ul class="list-disc pl-5 space-y-3 text-sm text-gray-700">
+                                        [cite_start]<li><strong>Short Term (0-5 Yrs):</strong> Heavy capital investment in tech infrastructure (DPIIC, GPU facility) and completion of National Geophysical Mapping[cite: 121, 130].</li>
+                                        [cite_start]<li><strong>Medium Term (0-10 Yrs):</strong> Shift towards predictive mapping algorithms and expanding landslide forecasting to 80 districts[cite: 124, 138].</li>
+                                        [cite_start]<li><strong>Long Term (2047):</strong> The ultimate goal is the "3D/4D Map of India" and deep lithosphere probing (IndPROBE)[cite: 124, 130].</li>
                                     </ul>
                                 </div>
                             </div>
                         </div>
 
-                        <div v-show="activeTab === 'table'">
-                            <div class="overflow-x-auto">
-                                <table class="min-w-full text-sm text-left text-gray-500">
-                                    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                        <div v-show="activeTab === 'table'" class="animate-fade">
+                            <div class="overflow-x-auto border rounded-lg">
+                                <table class="min-w-full text-sm text-left">
+                                    <thead class="text-xs text-gray-700 uppercase bg-gray-100">
                                         <tr>
-                                            <th class="px-4 py-3">Pillar</th>
-                                            <th class="px-4 py-3">Goal</th>
-                                            <th class="px-4 py-3">Timeline</th>
-                                            <th class="px-4 py-3 text-center">Year</th>
+                                            <th class="px-4 py-3 font-bold">Strategic Pillar</th>
+                                            <th class="px-4 py-3 font-bold">Action Point / Goal</th>
+                                            <th class="px-4 py-3 font-bold">Timeline</th>
+                                            <th class="px-4 py-3 text-center font-bold">Target Year</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr v-for="(item, index) in filteredData" :key="index" class="bg-white border-b hover:bg-gray-50">
+                                    <tbody class="divide-y divide-gray-200">
+                                        <tr v-for="(item, index) in filteredData" :key="index" class="bg-white hover:bg-gray-50 transition">
                                             <td class="px-4 py-3 font-medium text-gray-900">{{ item.Pillar }}</td>
-                                            <td class="px-4 py-3">{{ item.Goal }}</td>
+                                            <td class="px-4 py-3 text-gray-600">{{ item.Goal }}</td>
                                             <td class="px-4 py-3">
-                                                <span :class="getBadgeClass(item.Timeline)" class="px-2 py-1 rounded-full text-xs text-white">
+                                                <span :class="getBadgeClass(item.Timeline)" class="px-2 py-1 rounded-full text-xs font-bold text-white shadow-sm">
                                                     {{ item.Timeline }}
                                                 </span>
                                             </td>
-                                            <td class="px-4 py-3 text-center font-bold">{{ item.Year }}</td>
+                                            <td class="px-4 py-3 text-center font-mono font-bold text-blue-800">{{ item.Year }}</td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
+                            <p class="text-xs text-gray-400 mt-2 text-right">Showing {{ filteredData.length }} records based on active filters.</p>
                         </div>
 
-                        <div v-show="activeTab === 'minerals'" class="space-y-6">
+                        <div v-show="activeTab === 'minerals'" class="space-y-6 animate-fade">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div class="bg-amber-50 p-6 rounded-lg border border-amber-200">
-                                    <h3 class="text-xl font-bold text-amber-800 mb-4"><i class="fa-solid fa-bolt"></i> Energy Transition</h3>
-                                    <ul class="space-y-3 text-sm text-amber-900">
-                                        [cite_start]<li><strong class="text-amber-700">Lithium & Cobalt:</strong> Aggressive exploration in pegmatite belts[cite: 121].</li>
-                                        [cite_start]<li><strong class="text-amber-700">Natural Hydrogen:</strong> Exploration for 'White Hydrogen' reservoirs[cite: 121].</li>
-                                        [cite_start]<li><strong class="text-amber-700">Coal Innovation:</strong> Research on converting coal to oil (CTL) and using coal-derived anodes for Li-ion batteries[cite: 121].</li>
+                                <div class="bg-amber-50 p-6 rounded-xl border border-amber-200 shadow-sm">
+                                    <h3 class="text-lg font-bold text-amber-800 mb-4 flex items-center">
+                                        <i class="fa-solid fa-bolt mr-2"></i> Energy Transition & Security
+                                    </h3>
+                                    <ul class="space-y-4 text-sm text-amber-900">
+                                        <li class="flex items-start">
+                                            <i class="fa-solid fa-check mt-1 mr-2 text-amber-600"></i>
+                                            [cite_start]<span><strong>Lithium & Cobalt:</strong> Aggressive exploration required in pegmatite belts[cite: 121].</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fa-solid fa-check mt-1 mr-2 text-amber-600"></i>
+                                            [cite_start]<span><strong>Natural Hydrogen:</strong> New exploration for 'White Hydrogen' reservoirs[cite: 121].</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fa-solid fa-check mt-1 mr-2 text-amber-600"></i>
+                                            [cite_start]<span><strong>Coal Innovation:</strong> Research on Coal-to-Liquid (CTL) and coal-derived anodes for Li-ion batteries[cite: 121].</span>
+                                        </li>
                                     </ul>
                                 </div>
-                                <div class="bg-indigo-50 p-6 rounded-lg border border-indigo-200">
-                                    <h3 class="text-xl font-bold text-indigo-800 mb-4"><i class="fa-solid fa-layer-group"></i> Advanced Mapping</h3>
-                                    <ul class="space-y-3 text-sm text-indigo-900">
-                                        [cite_start]<li><strong class="text-indigo-700">Deep Seated:</strong> 2-D Seismic & Magnetotelluric (MT) surveys[cite: 124].</li>
-                                        [cite_start]<li><strong class="text-indigo-700">Offshore:</strong> Marine Gravimeter & ROV upgrades for coastal surveys[cite: 130].</li>
-                                        [cite_start]<li><strong class="text-indigo-700">Subsurface Map:</strong> Creation of a "Subsurface Critical Mineral Map" of India by 2039[cite: 124].</li>
+                                <div class="bg-indigo-50 p-6 rounded-xl border border-indigo-200 shadow-sm">
+                                    <h3 class="text-lg font-bold text-indigo-800 mb-4 flex items-center">
+                                        <i class="fa-solid fa-layer-group mr-2"></i> Advanced Mapping Tech
+                                    </h3>
+                                    <ul class="space-y-4 text-sm text-indigo-900">
+                                        <li class="flex items-start">
+                                            <i class="fa-solid fa-check mt-1 mr-2 text-indigo-600"></i>
+                                            [cite_start]<span><strong>Deep Seated:</strong> Utilization of 2-D Seismic & Magnetotelluric (MT) surveys[cite: 124].</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fa-solid fa-check mt-1 mr-2 text-indigo-600"></i>
+                                            [cite_start]<span><strong>Offshore:</strong> Upgrading Marine Gravimeters & ROVs for coastal surveys[cite: 130].</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fa-solid fa-check mt-1 mr-2 text-indigo-600"></i>
+                                            [cite_start]<span><strong>Subsurface Map:</strong> Creation of a definitive "Subsurface Critical Mineral Map" of India by 2039[cite: 124].</span>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -188,8 +221,9 @@
             </section>
         </main>
         
-        <footer class="gsi-blue text-white text-center py-4 text-xs">
-            <p>&copy; 2025 Dashboard Generated for GSI Vision 2047 Analysis</p>
+        <footer class="bg-gray-800 text-gray-400 text-center py-6 text-xs">
+            <p>&copy; 2025 Dashboard Generated for GSI Vision 2047 Analysis.</p>
+            <p class="mt-1">Data derived from official Vision Document.</p>
         </footer>
     </div>
 
@@ -199,6 +233,7 @@
         createApp({
             setup() {
                 // --- DATA ---
+                // Data extracted directly from the PDF tables provided in context
                 const rawData = [
                     { Pillar: "1. Economic Geology", Goal: "National Geophysical Mapping (NGPM)", Timeline: "Short Term (0-5 Yrs)", Year: 2029 },
                     { Pillar: "1. Economic Geology", Goal: "Pegmatite Mapping of India", Timeline: "Short Term (0-5 Yrs)", Year: 2029 },
@@ -227,7 +262,7 @@
                 const selectedTimelines = ref([...new Set(rawData.map(d => d.Timeline))]);
                 const selectedPillars = ref([...new Set(rawData.map(d => d.Pillar))]);
 
-                // --- COMPUTED ---
+                // --- COMPUTED PROPERTIES ---
                 const uniqueTimelines = computed(() => [...new Set(rawData.map(d => d.Timeline))]);
                 const uniquePillars = computed(() => [...new Set(rawData.map(d => d.Pillar))]);
 
@@ -252,26 +287,28 @@
                 const updateCharts = () => {
                     if (activeTab.value !== 'visualizer') return;
 
-                    // Scatter Plot
+                    // 1. Scatter Plot (Timeline)
                     const trace1 = {
                         x: filteredData.value.map(d => d.Year),
                         y: filteredData.value.map(d => d.Pillar),
                         mode: 'markers',
                         type: 'scatter',
                         text: filteredData.value.map(d => d.Goal),
-                        marker: { size: 14, color: '#1e3a8a', opacity: 0.7 }
+                        hovertemplate: '<b>%{y}</b><br>%{text}<br>Year: %{x}<extra></extra>',
+                        marker: { size: 16, color: '#1e3a8a', line: {color: 'white', width: 2}, opacity: 0.8 }
                     };
                     
                     const layout1 = {
-                        title: 'Goals by Year',
-                        margin: { t: 30, b: 40, l: 150, r: 20 },
-                        xaxis: { title: 'Target Year', dtick: 5 },
-                        yaxis: { automargin: true }
+                        margin: { t: 20, b: 40, l: 150, r: 20 },
+                        paper_bgcolor: "rgba(0,0,0,0)",
+                        plot_bgcolor: "rgba(0,0,0,0)",
+                        xaxis: { title: 'Target Year', dtick: 5, gridcolor: "#e5e7eb" },
+                        yaxis: { automargin: true, gridcolor: "#e5e7eb" }
                     };
 
-                    Plotly.newPlot('scatterPlot', [trace1], layout1, {responsive: true});
+                    Plotly.newPlot('scatterPlot', [trace1], layout1, {responsive: true, displayModeBar: false});
 
-                    // Pie Chart
+                    // 2. Pie Chart (Distribution)
                     const pillarCounts = {};
                     filteredData.value.forEach(d => {
                         pillarCounts[d.Pillar] = (pillarCounts[d.Pillar] || 0) + 1;
@@ -281,20 +318,24 @@
                         values: Object.values(pillarCounts),
                         labels: Object.keys(pillarCounts),
                         type: 'pie',
+                        textinfo: 'value',
                         marker: { colors: ['#059669', '#2563eb', '#d97706', '#dc2626', '#7c3aed', '#db2777', '#4b5563'] }
                     };
 
                     const layout2 = {
-                        margin: { t: 20, b: 20, l: 20, r: 20 },
-                        showlegend: false
+                        margin: { t: 10, b: 10, l: 10, r: 10 },
+                        showlegend: true,
+                        legend: { orientation: "v", x: 1, y: 0.5 },
+                        paper_bgcolor: "rgba(0,0,0,0)",
                     };
 
-                    Plotly.newPlot('pieChart', [trace2], layout2, {responsive: true});
+                    Plotly.newPlot('pieChart', [trace2], layout2, {responsive: true, displayModeBar: false});
                 };
 
                 // --- WATCHERS ---
                 watch([filteredData, activeTab], () => {
-                    setTimeout(updateCharts, 100); // Small delay to ensure DOM is ready
+                    // Slight delay to allow DOM to render before Plotly draws
+                    setTimeout(updateCharts, 50); 
                 });
 
                 onMounted(() => {
