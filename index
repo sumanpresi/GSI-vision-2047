@@ -1,0 +1,328 @@
+import React, { useState } from 'react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { Target, Zap, Globe, Database, Users, FileText, TrendingUp } from 'lucide-react';
+
+const GSIDashboard = () => {
+  const [selectedPillar, setSelectedPillar] = useState(null);
+  const [timeframe, setTimeframe] = useState('all');
+
+  const pillars = [
+    {
+      id: 1,
+      name: "Economic Geology & Critical Mineral Resource Mapping",
+      icon: <Target className="w-6 h-6" />,
+      color: "#3B82F6",
+      focus: "Exploration and mapping of critical minerals for energy transition",
+      shortTerm: 20,
+      mediumTerm: 5,
+      longTerm: 7
+    },
+    {
+      id: 2,
+      name: "Technology-Driven Geoscience Transformation",
+      icon: <Zap className="w-6 h-6" />,
+      color: "#8B5CF6",
+      focus: "Integration of AI/ML, drones, and advanced analytics",
+      shortTerm: 13,
+      mediumTerm: 3,
+      longTerm: 1
+    },
+    {
+      id: 3,
+      name: "Public Good and Fundamental Geoscience",
+      icon: <Globe className="w-6 h-6" />,
+      color: "#10B981",
+      focus: "Geological hazards, climate change, and environmental research",
+      shortTerm: 23,
+      mediumTerm: 4,
+      longTerm: 8
+    },
+    {
+      id: 4,
+      name: "Global Benchmarking & Strategic Partnerships",
+      icon: <Globe className="w-6 h-6" />,
+      color: "#F59E0B",
+      focus: "International collaboration and best practice adoption",
+      shortTerm: 4,
+      mediumTerm: 4,
+      longTerm: 1
+    },
+    {
+      id: 5,
+      name: "Integrated Data Infrastructure & Open Knowledge",
+      icon: <Database className="w-6 h-6" />,
+      color: "#EF4444",
+      focus: "Democratize geoscience data with FAIR principles",
+      shortTerm: 5,
+      mediumTerm: 0,
+      longTerm: 1
+    },
+    {
+      id: 6,
+      name: "Training & Capacity Building",
+      icon: <Users className="w-6 h-6" />,
+      color: "#EC4899",
+      focus: "Upskilling in modern geoscience and emerging technologies",
+      shortTerm: 8,
+      mediumTerm: 1,
+      longTerm: 2
+    },
+    {
+      id: 7,
+      name: "Policy Intervention",
+      icon: <FileText className="w-6 h-6" />,
+      color: "#06B6D4",
+      focus: "Position GSI as international geoscience leader",
+      shortTerm: 1,
+      mediumTerm: 1,
+      longTerm: 2
+    }
+  ];
+
+  const timelineData = [
+    { timeframe: "Short (0-5y)", actions: 74 },
+    { timeframe: "Medium (0-10y)", actions: 18 },
+    { timeframe: "Long (0-15y)", actions: 22 }
+  ];
+
+  const keyHighlights = [
+    { title: "Vision", text: "World-class, innovative geoscience institution empowering India" },
+    { title: "Target Year", text: "2047 - 100 years of independence" },
+    { title: "Total Strategic Pillars", text: "7 interconnected pillars" },
+    { title: "Action Points", text: "114+ specific initiatives" }
+  ];
+
+  const criticalPrograms = [
+    { name: "NGPM", desc: "National Geophysical Mapping Programme", timeline: "3+ years" },
+    { name: "NAGMP", desc: "National Aero-geophysical Mapping", timeline: "5-10 years" },
+    { name: "IndMAP", desc: "Pan India Magnetotelluric Imaging", timeline: "15 years" },
+    { name: "3D/4D Map", desc: "Complete 3D/4D geological map of India", timeline: "2047" },
+    { name: "IndPROBE", desc: "Deep lithosphere composition study", timeline: "2047" },
+    { name: "DPIIC", desc: "Data Processing & Integration Centre", timeline: "5 years" }
+  ];
+
+  const COLORS = ['#3B82F6', '#8B5CF6', '#10B981', '#F59E0B', '#EF4444', '#EC4899', '#06B6D4'];
+
+  const filterDataByTimeframe = (pillar) => {
+    if (timeframe === 'all') {
+      return pillar.shortTerm + pillar.mediumTerm + pillar.longTerm;
+    } else if (timeframe === 'short') {
+      return pillar.shortTerm;
+    } else if (timeframe === 'medium') {
+      return pillar.mediumTerm;
+    } else {
+      return pillar.longTerm;
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-800 mb-2">
+                GSI Vision 2047 Dashboard
+              </h1>
+              <p className="text-gray-600">
+                Strategic Roadmap for National Leadership in Geoscience
+              </p>
+            </div>
+            <TrendingUp className="w-16 h-16 text-blue-600" />
+          </div>
+        </div>
+
+        {/* Key Highlights */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+          {keyHighlights.map((highlight, idx) => (
+            <div key={idx} className="bg-white rounded-lg shadow p-4">
+              <h3 className="text-sm font-semibold text-gray-500 mb-2">
+                {highlight.title}
+              </h3>
+              <p className="text-lg font-bold text-gray-800">{highlight.text}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Timeline Filter */}
+        <div className="bg-white rounded-lg shadow-lg p-4 mb-6">
+          <div className="flex gap-2">
+            <button
+              onClick={() => setTimeframe('all')}
+              className={`px-4 py-2 rounded ${
+                timeframe === 'all'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-200 text-gray-700'
+              }`}
+            >
+              All Timeframes
+            </button>
+            <button
+              onClick={() => setTimeframe('short')}
+              className={`px-4 py-2 rounded ${
+                timeframe === 'short'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-200 text-gray-700'
+              }`}
+            >
+              Short Term (0-5 years)
+            </button>
+            <button
+              onClick={() => setTimeframe('medium')}
+              className={`px-4 py-2 rounded ${
+                timeframe === 'medium'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-200 text-gray-700'
+              }`}
+            >
+              Medium Term (0-10 years)
+            </button>
+            <button
+              onClick={() => setTimeframe('long')}
+              className={`px-4 py-2 rounded ${
+                timeframe === 'long'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-200 text-gray-700'
+              }`}
+            >
+              Long Term (0-15+ years)
+            </button>
+          </div>
+        </div>
+
+        {/* Strategic Pillars Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+          {pillars.map((pillar) => (
+            <div
+              key={pillar.id}
+              onClick={() => setSelectedPillar(pillar.id === selectedPillar ? null : pillar.id)}
+              className={`bg-white rounded-lg shadow-lg p-5 cursor-pointer transition-all transform hover:scale-105 ${
+                selectedPillar === pillar.id ? 'ring-4 ring-blue-500' : ''
+              }`}
+              style={{ borderTop: `4px solid ${pillar.color}` }}
+            >
+              <div className="flex items-start justify-between mb-3">
+                <div style={{ color: pillar.color }}>{pillar.icon}</div>
+                <span className="text-2xl font-bold text-gray-800">
+                  {filterDataByTimeframe(pillar)}
+                </span>
+              </div>
+              <h3 className="font-bold text-gray-800 mb-2 text-sm">
+                Pillar {pillar.id}: {pillar.name}
+              </h3>
+              <p className="text-xs text-gray-600">{pillar.focus}</p>
+              {selectedPillar === pillar.id && (
+                <div className="mt-3 pt-3 border-t border-gray-200">
+                  <div className="text-xs space-y-1">
+                    <div className="flex justify-between">
+                      <span>Short term:</span>
+                      <span className="font-semibold">{pillar.shortTerm} actions</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Medium term:</span>
+                      <span className="font-semibold">{pillar.mediumTerm} actions</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Long term:</span>
+                      <span className="font-semibold">{pillar.longTerm} actions</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+
+        {/* Charts Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+          {/* Timeline Distribution */}
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <h2 className="text-xl font-bold text-gray-800 mb-4">
+              Action Points by Timeline
+            </h2>
+            <ResponsiveContainer width="100%" height={250}>
+              <BarChart data={timelineData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="timeframe" />
+                <YAxis />
+                <Tooltip />
+                <Bar dataKey="actions" fill="#3B82F6" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Pillar Distribution */}
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <h2 className="text-xl font-bold text-gray-800 mb-4">
+              Distribution Across Pillars
+            </h2>
+            <ResponsiveContainer width="100%" height={250}>
+              <PieChart>
+                <Pie
+                  data={pillars}
+                  dataKey={(d) => filterDataByTimeframe(d)}
+                  nameKey="id"
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={80}
+                  label={(entry) => `P${entry.id}`}
+                >
+                  {pillars.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* Critical Programs */}
+        <div className="bg-white rounded-lg shadow-lg p-6">
+          <h2 className="text-xl font-bold text-gray-800 mb-4">
+            Critical Flagship Programs
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {criticalPrograms.map((program, idx) => (
+              <div
+                key={idx}
+                className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+              >
+                <h3 className="font-bold text-blue-600 mb-1">{program.name}</h3>
+                <p className="text-sm text-gray-700 mb-2">{program.desc}</p>
+                <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                  {program.timeline}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Vision & Mission */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+          <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg shadow-lg p-6 text-white">
+            <h2 className="text-xl font-bold mb-3">Vision 2047</h2>
+            <p className="text-sm leading-relaxed">
+              To develop into a world-class institution, innovative, and agile multi-disciplinary
+              geoscience institution that empowers India with foundational, objective, and actionable
+              geological knowledge for economic prosperity, environmental resilience, and sustainable
+              socio-economic development.
+            </p>
+          </div>
+          <div className="bg-gradient-to-br from-indigo-600 to-indigo-700 rounded-lg shadow-lg p-6 text-white">
+            <h2 className="text-xl font-bold mb-3">Mission 2047</h2>
+            <p className="text-sm leading-relaxed">
+              To systematically map and characterize India's geological framework; to discover and
+              responsibly quantify the nation's mineral and energy resources; to assess geohazards
+              and address climate change challenges; and to disseminate geospatial data openly to
+              drive innovation and informed decision-making.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default GSIDashboard;
