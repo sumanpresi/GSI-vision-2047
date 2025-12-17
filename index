@@ -1,328 +1,667 @@
-import React, { useState } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { Target, Zap, Globe, Database, Users, FileText, TrendingUp } from 'lucide-react';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GSI Vision 2047 Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-const GSIDashboard = () => {
-  const [selectedPillar, setSelectedPillar] = useState(null);
-  const [timeframe, setTimeframe] = useState('all');
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #EFF6FF 0%, #E0E7FF 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
 
-  const pillars = [
-    {
-      id: 1,
-      name: "Economic Geology & Critical Mineral Resource Mapping",
-      icon: <Target className="w-6 h-6" />,
-      color: "#3B82F6",
-      focus: "Exploration and mapping of critical minerals for energy transition",
-      shortTerm: 20,
-      mediumTerm: 5,
-      longTerm: 7
-    },
-    {
-      id: 2,
-      name: "Technology-Driven Geoscience Transformation",
-      icon: <Zap className="w-6 h-6" />,
-      color: "#8B5CF6",
-      focus: "Integration of AI/ML, drones, and advanced analytics",
-      shortTerm: 13,
-      mediumTerm: 3,
-      longTerm: 1
-    },
-    {
-      id: 3,
-      name: "Public Good and Fundamental Geoscience",
-      icon: <Globe className="w-6 h-6" />,
-      color: "#10B981",
-      focus: "Geological hazards, climate change, and environmental research",
-      shortTerm: 23,
-      mediumTerm: 4,
-      longTerm: 8
-    },
-    {
-      id: 4,
-      name: "Global Benchmarking & Strategic Partnerships",
-      icon: <Globe className="w-6 h-6" />,
-      color: "#F59E0B",
-      focus: "International collaboration and best practice adoption",
-      shortTerm: 4,
-      mediumTerm: 4,
-      longTerm: 1
-    },
-    {
-      id: 5,
-      name: "Integrated Data Infrastructure & Open Knowledge",
-      icon: <Database className="w-6 h-6" />,
-      color: "#EF4444",
-      focus: "Democratize geoscience data with FAIR principles",
-      shortTerm: 5,
-      mediumTerm: 0,
-      longTerm: 1
-    },
-    {
-      id: 6,
-      name: "Training & Capacity Building",
-      icon: <Users className="w-6 h-6" />,
-      color: "#EC4899",
-      focus: "Upskilling in modern geoscience and emerging technologies",
-      shortTerm: 8,
-      mediumTerm: 1,
-      longTerm: 2
-    },
-    {
-      id: 7,
-      name: "Policy Intervention",
-      icon: <FileText className="w-6 h-6" />,
-      color: "#06B6D4",
-      focus: "Position GSI as international geoscience leader",
-      shortTerm: 1,
-      mediumTerm: 1,
-      longTerm: 2
-    }
-  ];
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
 
-  const timelineData = [
-    { timeframe: "Short (0-5y)", actions: 74 },
-    { timeframe: "Medium (0-10y)", actions: 18 },
-    { timeframe: "Long (0-15y)", actions: 22 }
-  ];
+        .header {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-  const keyHighlights = [
-    { title: "Vision", text: "World-class, innovative geoscience institution empowering India" },
-    { title: "Target Year", text: "2047 - 100 years of independence" },
-    { title: "Total Strategic Pillars", text: "7 interconnected pillars" },
-    { title: "Action Points", text: "114+ specific initiatives" }
-  ];
+        .header h1 {
+            font-size: 2rem;
+            color: #1F2937;
+            margin-bottom: 0.5rem;
+        }
 
-  const criticalPrograms = [
-    { name: "NGPM", desc: "National Geophysical Mapping Programme", timeline: "3+ years" },
-    { name: "NAGMP", desc: "National Aero-geophysical Mapping", timeline: "5-10 years" },
-    { name: "IndMAP", desc: "Pan India Magnetotelluric Imaging", timeline: "15 years" },
-    { name: "3D/4D Map", desc: "Complete 3D/4D geological map of India", timeline: "2047" },
-    { name: "IndPROBE", desc: "Deep lithosphere composition study", timeline: "2047" },
-    { name: "DPIIC", desc: "Data Processing & Integration Centre", timeline: "5 years" }
-  ];
+        .header p {
+            color: #6B7280;
+            font-size: 1rem;
+        }
 
-  const COLORS = ['#3B82F6', '#8B5CF6', '#10B981', '#F59E0B', '#EF4444', '#EC4899', '#06B6D4'];
+        .header-icon {
+            width: 64px;
+            height: 64px;
+            color: #3B82F6;
+        }
 
-  const filterDataByTimeframe = (pillar) => {
-    if (timeframe === 'all') {
-      return pillar.shortTerm + pillar.mediumTerm + pillar.longTerm;
-    } else if (timeframe === 'short') {
-      return pillar.shortTerm;
-    } else if (timeframe === 'medium') {
-      return pillar.mediumTerm;
-    } else {
-      return pillar.longTerm;
-    }
-  };
+        .highlights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
-          <div className="flex items-center justify-between">
+        .highlight-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+        }
+
+        .highlight-card h3 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #6B7280;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .highlight-card p {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: #1F2937;
+        }
+
+        .filter-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: #E5E7EB;
+            color: #374151;
+        }
+
+        .filter-btn.active {
+            background: #3B82F6;
+            color: white;
+        }
+
+        .filter-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .pillar-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-top: 4px solid;
+        }
+
+        .pillar-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 12px rgba(0,0,0,0.15);
+        }
+
+        .pillar-card.selected {
+            ring: 4px solid #3B82F6;
+            box-shadow: 0 0 0 4px #3B82F6;
+        }
+
+        .pillar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .pillar-icon {
+            width: 24px;
+            height: 24px;
+        }
+
+        .pillar-count {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1F2937;
+        }
+
+        .pillar-title {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: #1F2937;
+            margin-bottom: 0.5rem;
+        }
+
+        .pillar-focus {
+            font-size: 0.75rem;
+            color: #6B7280;
+            line-height: 1.4;
+        }
+
+        .pillar-details {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #E5E7EB;
+            font-size: 0.75rem;
+            display: none;
+        }
+
+        .pillar-details.show {
+            display: block;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.25rem;
+        }
+
+        .detail-row span:last-child {
+            font-weight: 600;
+        }
+
+        .charts-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+        }
+
+        .chart-card h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1F2937;
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+
+        .programs-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .programs-section h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1F2937;
+            margin-bottom: 1.5rem;
+        }
+
+        .programs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .program-card {
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            padding: 1rem;
+            transition: box-shadow 0.2s;
+        }
+
+        .program-card:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .program-card h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #3B82F6;
+            margin-bottom: 0.5rem;
+        }
+
+        .program-card p {
+            font-size: 0.875rem;
+            color: #374151;
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
+        }
+
+        .program-badge {
+            display: inline-block;
+            font-size: 0.75rem;
+            background: #DBEAFE;
+            color: #1E40AF;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+        }
+
+        .vision-mission {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+        }
+
+        .vision-card, .mission-card {
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 2rem;
+            color: white;
+        }
+
+        .vision-card {
+            background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+        }
+
+        .mission-card {
+            background: linear-gradient(135deg, #4F46E5 0%, #4338CA 100%);
+        }
+
+        .vision-card h2, .mission-card h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .vision-card p, .mission-card p {
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .header-icon {
+                margin-top: 1rem;
+            }
+
+            .charts-section {
+                grid-template-columns: 1fr;
+            }
+
+            .vision-mission {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
             <div>
-              <h1 className="text-3xl font-bold text-gray-800 mb-2">
-                GSI Vision 2047 Dashboard
-              </h1>
-              <p className="text-gray-600">
-                Strategic Roadmap for National Leadership in Geoscience
-              </p>
+                <h1>GSI Vision 2047 Dashboard</h1>
+                <p>Strategic Roadmap for National Leadership in Geoscience</p>
             </div>
-            <TrendingUp className="w-16 h-16 text-blue-600" />
-          </div>
+            <svg class="header-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+            </svg>
         </div>
 
-        {/* Key Highlights */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          {keyHighlights.map((highlight, idx) => (
-            <div key={idx} className="bg-white rounded-lg shadow p-4">
-              <h3 className="text-sm font-semibold text-gray-500 mb-2">
-                {highlight.title}
-              </h3>
-              <p className="text-lg font-bold text-gray-800">{highlight.text}</p>
+        <!-- Highlights -->
+        <div class="highlights">
+            <div class="highlight-card">
+                <h3>Vision</h3>
+                <p>World-class, innovative geoscience institution empowering India</p>
             </div>
-          ))}
+            <div class="highlight-card">
+                <h3>Target Year</h3>
+                <p>2047 - 100 years of independence</p>
+            </div>
+            <div class="highlight-card">
+                <h3>Strategic Pillars</h3>
+                <p>7 interconnected pillars</p>
+            </div>
+            <div class="highlight-card">
+                <h3>Action Points</h3>
+                <p>114+ specific initiatives</p>
+            </div>
         </div>
 
-        {/* Timeline Filter */}
-        <div className="bg-white rounded-lg shadow-lg p-4 mb-6">
-          <div className="flex gap-2">
-            <button
-              onClick={() => setTimeframe('all')}
-              className={`px-4 py-2 rounded ${
-                timeframe === 'all'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-200 text-gray-700'
-              }`}
-            >
-              All Timeframes
-            </button>
-            <button
-              onClick={() => setTimeframe('short')}
-              className={`px-4 py-2 rounded ${
-                timeframe === 'short'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-200 text-gray-700'
-              }`}
-            >
-              Short Term (0-5 years)
-            </button>
-            <button
-              onClick={() => setTimeframe('medium')}
-              className={`px-4 py-2 rounded ${
-                timeframe === 'medium'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-200 text-gray-700'
-              }`}
-            >
-              Medium Term (0-10 years)
-            </button>
-            <button
-              onClick={() => setTimeframe('long')}
-              className={`px-4 py-2 rounded ${
-                timeframe === 'long'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-200 text-gray-700'
-              }`}
-            >
-              Long Term (0-15+ years)
-            </button>
-          </div>
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">All Timeframes</button>
+                <button class="filter-btn" data-filter="short">Short Term (0-5 years)</button>
+                <button class="filter-btn" data-filter="medium">Medium Term (0-10 years)</button>
+                <button class="filter-btn" data-filter="long">Long Term (0-15+ years)</button>
+            </div>
         </div>
 
-        {/* Strategic Pillars Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-          {pillars.map((pillar) => (
-            <div
-              key={pillar.id}
-              onClick={() => setSelectedPillar(pillar.id === selectedPillar ? null : pillar.id)}
-              className={`bg-white rounded-lg shadow-lg p-5 cursor-pointer transition-all transform hover:scale-105 ${
-                selectedPillar === pillar.id ? 'ring-4 ring-blue-500' : ''
-              }`}
-              style={{ borderTop: `4px solid ${pillar.color}` }}
-            >
-              <div className="flex items-start justify-between mb-3">
-                <div style={{ color: pillar.color }}>{pillar.icon}</div>
-                <span className="text-2xl font-bold text-gray-800">
-                  {filterDataByTimeframe(pillar)}
-                </span>
-              </div>
-              <h3 className="font-bold text-gray-800 mb-2 text-sm">
-                Pillar {pillar.id}: {pillar.name}
-              </h3>
-              <p className="text-xs text-gray-600">{pillar.focus}</p>
-              {selectedPillar === pillar.id && (
-                <div className="mt-3 pt-3 border-t border-gray-200">
-                  <div className="text-xs space-y-1">
-                    <div className="flex justify-between">
-                      <span>Short term:</span>
-                      <span className="font-semibold">{pillar.shortTerm} actions</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Medium term:</span>
-                      <span className="font-semibold">{pillar.mediumTerm} actions</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Long term:</span>
-                      <span className="font-semibold">{pillar.longTerm} actions</span>
-                    </div>
-                  </div>
+        <!-- Pillars Grid -->
+        <div class="pillars-grid" id="pillarsGrid"></div>
+
+        <!-- Charts Section -->
+        <div class="charts-section">
+            <div class="chart-card">
+                <h2>Action Points by Timeline</h2>
+                <div class="chart-container">
+                    <canvas id="timelineChart"></canvas>
                 </div>
-              )}
             </div>
-          ))}
+            <div class="chart-card">
+                <h2>Distribution Across Pillars</h2>
+                <div class="chart-container">
+                    <canvas id="pillarChart"></canvas>
+                </div>
+            </div>
         </div>
 
-        {/* Charts Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-          {/* Timeline Distribution */}
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <h2 className="text-xl font-bold text-gray-800 mb-4">
-              Action Points by Timeline
-            </h2>
-            <ResponsiveContainer width="100%" height={250}>
-              <BarChart data={timelineData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="timeframe" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="actions" fill="#3B82F6" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-
-          {/* Pillar Distribution */}
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <h2 className="text-xl font-bold text-gray-800 mb-4">
-              Distribution Across Pillars
-            </h2>
-            <ResponsiveContainer width="100%" height={250}>
-              <PieChart>
-                <Pie
-                  data={pillars}
-                  dataKey={(d) => filterDataByTimeframe(d)}
-                  nameKey="id"
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={80}
-                  label={(entry) => `P${entry.id}`}
-                >
-                  {pillars.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
+        <!-- Critical Programs -->
+        <div class="programs-section">
+            <h2>Critical Flagship Programs</h2>
+            <div class="programs-grid">
+                <div class="program-card">
+                    <h3>NGPM</h3>
+                    <p>National Geophysical Mapping Programme</p>
+                    <span class="program-badge">3+ years</span>
+                </div>
+                <div class="program-card">
+                    <h3>NAGMP</h3>
+                    <p>National Aero-geophysical Mapping</p>
+                    <span class="program-badge">5-10 years</span>
+                </div>
+                <div class="program-card">
+                    <h3>IndMAP</h3>
+                    <p>Pan India Magnetotelluric Imaging</p>
+                    <span class="program-badge">15 years</span>
+                </div>
+                <div class="program-card">
+                    <h3>3D/4D Map</h3>
+                    <p>Complete 3D/4D geological map of India</p>
+                    <span class="program-badge">2047</span>
+                </div>
+                <div class="program-card">
+                    <h3>IndPROBE</h3>
+                    <p>Deep lithosphere composition study</p>
+                    <span class="program-badge">2047</span>
+                </div>
+                <div class="program-card">
+                    <h3>DPIIC</h3>
+                    <p>Data Processing & Integration Centre</p>
+                    <span class="program-badge">5 years</span>
+                </div>
+            </div>
         </div>
 
-        {/* Critical Programs */}
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">
-            Critical Flagship Programs
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {criticalPrograms.map((program, idx) => (
-              <div
-                key={idx}
-                className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
-              >
-                <h3 className="font-bold text-blue-600 mb-1">{program.name}</h3>
-                <p className="text-sm text-gray-700 mb-2">{program.desc}</p>
-                <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
-                  {program.timeline}
-                </span>
-              </div>
-            ))}
-          </div>
+        <!-- Vision & Mission -->
+        <div class="vision-mission">
+            <div class="vision-card">
+                <h2>Vision 2047</h2>
+                <p>To develop into a world-class institution, innovative, and agile multi-disciplinary geoscience institution that empowers India with foundational, objective, and actionable geological knowledge for economic prosperity, environmental resilience, and sustainable socio-economic development.</p>
+            </div>
+            <div class="mission-card">
+                <h2>Mission 2047</h2>
+                <p>To systematically map and characterize India's geological framework; to discover and responsibly quantify the nation's mineral and energy resources; to assess geohazards and address climate change challenges; and to disseminate geospatial data openly to drive innovation and informed decision-making.</p>
+            </div>
         </div>
-
-        {/* Vision & Mission */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-          <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg shadow-lg p-6 text-white">
-            <h2 className="text-xl font-bold mb-3">Vision 2047</h2>
-            <p className="text-sm leading-relaxed">
-              To develop into a world-class institution, innovative, and agile multi-disciplinary
-              geoscience institution that empowers India with foundational, objective, and actionable
-              geological knowledge for economic prosperity, environmental resilience, and sustainable
-              socio-economic development.
-            </p>
-          </div>
-          <div className="bg-gradient-to-br from-indigo-600 to-indigo-700 rounded-lg shadow-lg p-6 text-white">
-            <h2 className="text-xl font-bold mb-3">Mission 2047</h2>
-            <p className="text-sm leading-relaxed">
-              To systematically map and characterize India's geological framework; to discover and
-              responsibly quantify the nation's mineral and energy resources; to assess geohazards
-              and address climate change challenges; and to disseminate geospatial data openly to
-              drive innovation and informed decision-making.
-            </p>
-          </div>
-        </div>
-      </div>
     </div>
-  );
-};
 
-export default GSIDashboard;
+    <script>
+        const pillarsData = [
+            {
+                id: 1,
+                name: "Economic Geology & Critical Mineral Resource Mapping",
+                color: "#3B82F6",
+                focus: "Exploration and mapping of critical minerals for energy transition",
+                shortTerm: 20,
+                mediumTerm: 5,
+                longTerm: 7
+            },
+            {
+                id: 2,
+                name: "Technology-Driven Geoscience Transformation",
+                color: "#8B5CF6",
+                focus: "Integration of AI/ML, drones, and advanced analytics",
+                shortTerm: 13,
+                mediumTerm: 3,
+                longTerm: 1
+            },
+            {
+                id: 3,
+                name: "Public Good and Fundamental Geoscience",
+                color: "#10B981",
+                focus: "Geological hazards, climate change, and environmental research",
+                shortTerm: 23,
+                mediumTerm: 4,
+                longTerm: 8
+            },
+            {
+                id: 4,
+                name: "Global Benchmarking & Strategic Partnerships",
+                color: "#F59E0B",
+                focus: "International collaboration and best practice adoption",
+                shortTerm: 4,
+                mediumTerm: 4,
+                longTerm: 1
+            },
+            {
+                id: 5,
+                name: "Integrated Data Infrastructure & Open Knowledge",
+                color: "#EF4444",
+                focus: "Democratize geoscience data with FAIR principles",
+                shortTerm: 5,
+                mediumTerm: 0,
+                longTerm: 1
+            },
+            {
+                id: 6,
+                name: "Training & Capacity Building",
+                color: "#EC4899",
+                focus: "Upskilling in modern geoscience and emerging technologies",
+                shortTerm: 8,
+                mediumTerm: 1,
+                longTerm: 2
+            },
+            {
+                id: 7,
+                name: "Policy Intervention",
+                color: "#06B6D4",
+                focus: "Position GSI as international geoscience leader",
+                shortTerm: 1,
+                mediumTerm: 1,
+                longTerm: 2
+            }
+        ];
+
+        let currentFilter = 'all';
+        let selectedPillar = null;
+        let timelineChart = null;
+        let pillarChart = null;
+
+        function getFilteredValue(pillar) {
+            if (currentFilter === 'all') {
+                return pillar.shortTerm + pillar.mediumTerm + pillar.longTerm;
+            } else if (currentFilter === 'short') {
+                return pillar.shortTerm;
+            } else if (currentFilter === 'medium') {
+                return pillar.mediumTerm;
+            } else {
+                return pillar.longTerm;
+            }
+        }
+
+        function renderPillars() {
+            const grid = document.getElementById('pillarsGrid');
+            grid.innerHTML = '';
+
+            pillarsData.forEach(pillar => {
+                const card = document.createElement('div');
+                card.className = `pillar-card ${selectedPillar === pillar.id ? 'selected' : ''}`;
+                card.style.borderTopColor = pillar.color;
+                
+                card.innerHTML = `
+                    <div class="pillar-header">
+                        <svg class="pillar-icon" style="color: ${pillar.color}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10" stroke-width="2"></circle>
+                        </svg>
+                        <span class="pillar-count">${getFilteredValue(pillar)}</span>
+                    </div>
+                    <h3 class="pillar-title">Pillar ${pillar.id}: ${pillar.name}</h3>
+                    <p class="pillar-focus">${pillar.focus}</p>
+                    <div class="pillar-details ${selectedPillar === pillar.id ? 'show' : ''}">
+                        <div class="detail-row">
+                            <span>Short term:</span>
+                            <span>${pillar.shortTerm} actions</span>
+                        </div>
+                        <div class="detail-row">
+                            <span>Medium term:</span>
+                            <span>${pillar.mediumTerm} actions</span>
+                        </div>
+                        <div class="detail-row">
+                            <span>Long term:</span>
+                            <span>${pillar.longTerm} actions</span>
+                        </div>
+                    </div>
+                `;
+
+                card.addEventListener('click', () => {
+                    selectedPillar = selectedPillar === pillar.id ? null : pillar.id;
+                    renderPillars();
+                });
+
+                grid.appendChild(card);
+            });
+        }
+
+        function createTimelineChart() {
+            const ctx = document.getElementById('timelineChart').getContext('2d');
+            
+            if (timelineChart) {
+                timelineChart.destroy();
+            }
+
+            timelineChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Short (0-5y)', 'Medium (0-10y)', 'Long (0-15y)'],
+                    datasets: [{
+                        label: 'Action Points',
+                        data: [74, 18, 22],
+                        backgroundColor: '#3B82F6',
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 20
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createPillarChart() {
+            const ctx = document.getElementById('pillarChart').getContext('2d');
+            
+            if (pillarChart) {
+                pillarChart.destroy();
+            }
+
+            pillarChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: pillarsData.map(p => `P${p.id}`),
+                    datasets: [{
+                        data: pillarsData.map(p => getFilteredValue(p)),
+                        backgroundColor: pillarsData.map(p => p.color),
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const pillar = pillarsData[context.dataIndex];
+                                    return `Pillar ${pillar.id}: ${context.parsed} actions`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Filter buttons
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter = btn.dataset.filter;
+                renderPillars();
+                createPillarChart();
+            });
+        });
+
+        // Initialize
+        renderPillars();
+        createTimelineChart();
+        createPillarChart();
+    </script>
+</body>
+</html>
